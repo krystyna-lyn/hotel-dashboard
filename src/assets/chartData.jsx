@@ -1,4 +1,4 @@
-const bookingsLineData = {
+export const bookingsLineData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
         {
@@ -12,7 +12,7 @@ const bookingsLineData = {
     ]
 }
 
-const roomOccupancyBarData = {
+export const roomOccupancyBarData = {
     labels: ['Single Room', 'Double Room', 'Suite', 'Family Room'],
     datasets: [
         {

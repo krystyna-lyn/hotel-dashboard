@@ -9,27 +9,27 @@ import {
 
 const Sidebar = () => {
     return (
-        <div className="bg-gray-800 text-gray-200 h-screen px-4 fixed w-16 md:w-64 border-r border-gray-700">
+        <div className="text-gray-800 h-screen px-4 fixed w-17 md:w-64 border-r border-gray-300">
             <h1 className="text-2xl mb-4 hidden mt-4 text-center italic md:block">Hotel Admin</h1>
             <ul className='flex flex-col mt-5 text-xl'>
-                <li className='flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
-                    <FiHome />
+                <li className='flex text-gray-800 items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
+                    <FiHome className="shrink-0" />
                     <span className='hidden md:inline'>Dashboard</span>
                 </li>
                 <li className='flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
-                    <FiKey />
+                    <FiKey className="shrink-0" />
                     <span className='hidden md:inline'>Rooms</span>
                 </li>
                 <li className='flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
-                    <FiUsers />
+                    <FiUsers className="shrink-0" />
                     <span className='hidden md:inline'>Guests</span>
                 </li>
                 <li className='flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
-                    <FiCalendar />
+                    <FiCalendar className="shrink-0" />
                     <span className='hidden md:inline'>Bookings</span>
                 </li>
                 <li className='flex items-center py-3 px-2 space-x-4 hover:rounded hover:cursor-pointer hover:bg-gray-700 hover:text-white'>
-                    <FiSettings />
+                    <FiSettings className="shrink-0" />
                     <span className='hidden md:inline'>Settings</span>
                 </li>
             </ul>
