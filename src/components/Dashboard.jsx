@@ -18,11 +18,11 @@ const Dashboard = () => {
 
             </div>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-                <div className='bg-white p-4 rounded-lg shadow-md'>
+                <div className='bg-white p-4 rounded-lg shadow-md dark:bg-gray-900 dark:text-white'>
                     <h3 className='text-lg font-semibold mb-4'>Bookings per Month</h3>
                     <Line data={bookingsLineData} />
                 </div>
-                <div className='bg-white p-4 rounded-lg shadow-md'>
+                <div className='bg-white p-4 rounded-lg shadow-md dark:bg-gray-900 dark:text-white'>
                     <h3 className='text-lg font-semibold mb-4'>Room Types Occupancy</h3>
                     <Line data={roomOccupancyBarData} />
                 </div>
