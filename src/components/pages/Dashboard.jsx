@@ -1,8 +1,8 @@
 import { FiCalendar, FiKey, FiUsers } from 'react-icons/fi'
-import Card from './Card.jsx'
+import Card from '../Card.jsx'
 import { Chart as ChartJS, LineElement, BarElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { bookingsLineData, roomOccupancyBarData } from '../assets/chartData.jsx';
+import { bookingsLineData, roomOccupancyBarData } from '../../assets/chartData.jsx';
 
 ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale, PointElement);
 

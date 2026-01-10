@@ -1,22 +1,27 @@
-import './App.css'
-import Dashboard from './components/Dashboard'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import ThemeContextProvider from './context/ThemeContextProvider'
-
+import { BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
+import ThemeContextProvider from "./context/ThemeContextProvider";
+import Dashboard from "./components/pages/Dashboard";
+import Bookings from "./components/pages/Bookings";
+import Rooms from "./components/pages/Rooms";
+import Guests from "./components/pages/Guests";
 function App() {
-
   return (
     <ThemeContextProvider>
-      <div className='flex'>
-        <Sidebar />
-        <div className='grow ml-16 md:ml-64 h-full lg:h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white'>
-          <Navbar />
-          <Dashboard />
-        </div>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path='/' element={<Dashboard />} />
+            <Route path='/bookings' element={<Bookings />} />
+            <Route path='/rooms' element={<Rooms />} />
+            <Route path='/guests' element={<Guests />} />
+          </Route>
+        </Routes>
+
+      </BrowserRouter>
     </ThemeContextProvider>
   )
 }
 
-export default App
+export default App;
