@@ -5,8 +5,8 @@ import ActionButtons from './ActionButtons'
 
 const TableList = () => {
     return (
-        <div className='overflow-x-auto shadow-md sm:rounded-lg'>
-            <table className='w-full table-auto border-separate border-spacing-y-2  text-left text-gray-900 p-4 text-lg font-semibold dark:text-white'>
+        <div className='overflow-x-auto sm:rounded-lg'>
+            <table className='w-full table-auto border-collapse mb-6 text-left text-gray-900 p-4 text-lg font-semibold dark:text-white'>
                 <thead className='hidden md:table-header-group'>
                     <tr className='bg-gray-200 dark:bg-gray-700 mb-2'>
                         <th className='p-3'>Guest</th>
