@@ -10,7 +10,7 @@ const BookingsForm = () => {
         check_out: '',
         status: 'confirmed'
     })
-
+    const today = new Date().toISOString().split('T')[0];
 
 
     return (
@@ -28,10 +28,12 @@ const BookingsForm = () => {
                 <Input
                     type='date'
                     name='check_in'
+                    value={today}
                     placeholder='Check-in date' />
                 <Input
                     type='date'
                     name='check_out'
+                    value={today}
                     placeholder='Check-out date' />
 
                 <Select name='status'>
