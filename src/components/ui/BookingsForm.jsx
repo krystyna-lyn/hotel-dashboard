@@ -10,33 +10,57 @@ const BookingsForm = () => {
         check_out: '',
         status: 'confirmed'
     })
-    const today = new Date().toISOString().split('T')[0];
 
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit = (e) => {
+        e.preventdefault();
+        console.log(form);
+        onAdd(form);
+        setForm({
+            guest: '',
+            room: '',
+            check_in: '',
+            check_out: '',
+            status: 'confirmed'
+        })
+    }
 
     return (
         <div>
-            <form className='mb-6 text-gray-900 p-2 text-lg font-semibold grid grid-cols-1 gap-10 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6' >
+            <form className='mb-6 text-gray-900 p-2 text-lg font-semibold grid grid-cols-1 gap-10 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6'
+                onSubmit={handleSubmit}>
                 <Input
                     type='text'
                     name='guest_name'
                     placeholder='Guest name'
-                />
+                    value={form.guest}
+                    onChange={handleChange} />
                 <Input
                     type='text'
                     name='room_number'
-                    placeholder='Room number' />
+                    placeholder='Room number'
+                    value={form.room}
+                    onChange={handleChange} />
                 <Input
                     type='date'
                     name='check_in'
-                    value={today}
-                    placeholder='Check-in date' />
+                    placeholder='Check-in date'
+                    value={form.check_in}
+                    onChange={handleChange} />
                 <Input
                     type='date'
                     name='check_out'
-                    value={today}
-                    placeholder='Check-out date' />
+                    placeholder='Check-out date'
+                    value={form.check_out}
+                    onChange={handleChange} />
 
-                <Select name='status'>
+                <Select name='status'
+                    value={form.status}
+                    onChange={handleChange}
+                >
                     <option value={'confirmed'}>Confirmed</option>
                     <option value={'pending'}>Pending</option>
                     <option value={'cancelled'}>Cancelled</option>
