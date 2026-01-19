@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Input from './Input'
 import Select from './Select'
+import { createBooking } from '../../services/bookingService'
 
 const BookingsForm = () => {
     const [form, setForm] = useState({
-        guest: '',
-        room: '',
+        guest_name: '',
+        room_number: '',
         check_in: '',
         check_out: '',
         status: 'confirmed'
@@ -15,18 +16,20 @@ const BookingsForm = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = (e) => {
-        e.preventdefault();
-        console.log(form);
-        onAdd(form);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        await createBooking(form);
+
         setForm({
-            guest: '',
-            room: '',
+            guest_name: '',
+            room_number: '',
             check_in: '',
             check_out: '',
             status: 'confirmed'
-        })
-    }
+        });
+    };
+
 
     return (
         <div>
@@ -36,13 +39,13 @@ const BookingsForm = () => {
                     type='text'
                     name='guest_name'
                     placeholder='Guest name'
-                    value={form.guest}
+                    value={form.guest_name}
                     onChange={handleChange} />
                 <Input
                     type='text'
                     name='room_number'
                     placeholder='Room number'
-                    value={form.room}
+                    value={form.room_number}
                     onChange={handleChange} />
                 <Input
                     type='date'
