@@ -1,9 +1,27 @@
-import React from 'react'
-import { FiDelete, FiEdit, FiTrash } from 'react-icons/fi'
+import React, { useEffect, useState } from 'react'
 import ActionButtons from './ActionButtons'
+import { getBookings } from '../../services/bookingService';
 
 
-const TableList = () => {
+
+const TableList = ({ setSelectedBooking }) => {
+
+    const [bookings, setBookings] = useState([]);
+
+    const fetchBookings = async () => {
+        try {
+            const response = await getBookings();
+            setBookings(response.data);
+
+        } catch (error) {
+            console.error('Error fetching bookings:', error)
+        }
+    }
+
+
+    useEffect(() => {
+        fetchBookings();
+    }, [])
     return (
         <div className='overflow-x-auto sm:rounded-lg'>
             <table className='w-full table-auto border-collapse mb-6 text-left text-gray-900 p-4 text-lg font-semibold dark:text-white'>
@@ -18,65 +36,22 @@ const TableList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Guest'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Guest</span>
-                            John Doe
-                        </td>
-
-                        <td className='flex md:table-cell justify-between p-3' data-label='Room'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Room</span>
-                            101
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Check-in' >
-                            <span className='md:hidden text-gray-900 dark:text-white'>Check-in</span>
-                            2024-07-01
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Check-out'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Check-out</span>
-                            2024-07-05
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Status'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Status</span>
-                            Confirmed
-                        </td>
-                        <td className='flex md:table-cell justify-end gap-2 p-3' data-label='Actions' >
-                            <ActionButtons />
-                        </td>
-                    </tr>
-                    <tr className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Guest'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Guest</span>
-                            Jane Smith
-                        </td>
-
-                        <td className='flex md:table-cell justify-between p-3' data-label='Room'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Room</span>
-                            202
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Check-in' >
-                            <span className='md:hidden text-gray-900 dark:text-white'>Check-in</span>
-                            2024-07-03
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Check-out'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Check-out</span>
-                            2024-07-07
-                        </td>
-                        <td className='flex md:table-cell justify-between p-3' data-label='Status'>
-                            <span className='md:hidden text-gray-900 dark:text-white'>Status</span>
-                            Checked-in
-                        </td>
-                        <td className='flex md:table-cell justify-end gap-2 p-3' data-label='Actions' >
-                            <ActionButtons />
-                        </td>
-                    </tr>
-
+                    {bookings.map((booking, index) => (
+                        <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
+                            <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
+                            <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
+                            <td className='flex md:table-cell justify-between p-3'>{booking.check_in.split('T')[0]}</td>
+                            <td className='flex md:table-cell justify-between p-3'>{booking.check_out.split('T')[0]}</td>
+                            <td className='flex md:table-cell justify-between p-3'>{booking.status}</td>
+                            <td className='flex md:table-cell justify-end gap-2 p-3'>
+                                <ActionButtons booking={booking}
+                                    onEdit={setSelectedBooking} />
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
-
-
         </div>
-
     )
 }
 
