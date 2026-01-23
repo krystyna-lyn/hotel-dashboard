@@ -8,13 +8,17 @@ const Bookings = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
 
     useEffect(() => {
-        console.log(selectedBooking)
+        if (selectedBooking) {
+            console.log("Selected booking changed:", selectedBooking);
+        }
     }, [selectedBooking])
 
 
     return (
         <div className="text-2xl font-semibold mb-4">
-            <p className="text-gray-900 mb-4 dark:text-white">Manage all your bookings here.</p>
+            <p className="text-gray-900 mb-4 dark:text-white">
+                Manage all your bookings here
+            </p>
             <TableList selectedBooking={selectedBooking}
                 setSelectedBooking={setSelectedBooking} />
             <BookingsForm
