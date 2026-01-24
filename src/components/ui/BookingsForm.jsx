@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Input from './Input'
 import Select from './Select'
 import { createBooking } from '../../services/bookingService'
 
-const BookingsForm = () => {
+const BookingsForm = ({ selectedBooking }) => {
+
     const [form, setForm] = useState({
         guest_name: '',
         room_number: '',
@@ -15,6 +16,11 @@ const BookingsForm = () => {
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
+
+    useEffect(() => {
+        console.log("Selected booking in form:", selectedBooking);
+
+    }, [selectedBooking]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
