@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 
 const Bookings = () => {
 
-    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [editBooking, setEditBooking] = useState(null);
+
 
     useEffect(() => {
-        if (selectedBooking) {
-            console.log("Selected booking changed:", selectedBooking);
-        }
-    }, [selectedBooking])
+        console.log("Selected booking for edit:", editBooking);
+
+    }, [editBooking])
 
 
     return (
@@ -19,11 +19,12 @@ const Bookings = () => {
             <p className="text-gray-900 mb-4 dark:text-white">
                 Manage all your bookings here
             </p>
-            <TableList selectedBooking={selectedBooking}
-                setSelectedBooking={setSelectedBooking} />
+            <TableList
+                setEditBooking={setEditBooking}
+            />
             <BookingsForm
-                selectedBooking={selectedBooking}
-                setSelectedBooking={setSelectedBooking}
+                editBooking={editBooking}
+                setEditBooking={setEditBooking}
             />
         </div>
     )
