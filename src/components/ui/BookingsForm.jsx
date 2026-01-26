@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import Input from './Input'
 import Select from './Select'
-import { createBooking } from '../../services/bookingService'
+import { createBooking, updateBooking } from '../../services/bookingService'
 
-const BookingsForm = ({ selectedBooking }) => {
+const BookingsForm = ({ editBooking }) => {
 
     const [form, setForm] = useState({
         guest_name: '',
@@ -12,20 +12,33 @@ const BookingsForm = ({ selectedBooking }) => {
         check_out: '',
         status: 'confirmed'
     })
+    //console.log("form:", form);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
     useEffect(() => {
-        console.log("Selected booking in form:", selectedBooking);
-
-    }, [selectedBooking]);
+        if (editBooking) {
+            setForm({
+                guest_name: editBooking.guest_name,
+                room_number: editBooking.room_number,
+                check_in: editBooking.check_in.split('T')[0],
+                check_out: editBooking.check_out.split('T')[0],
+                status: editBooking.status
+            })
+        }
+    }, [editBooking]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await createBooking(form);
+        if (editBooking) {
+            await updateBooking(editBooking.id, form);
+        }
+        else {
+            await createBooking(form);
+        }
 
         setForm({
             guest_name: '',
@@ -74,7 +87,12 @@ const BookingsForm = ({ selectedBooking }) => {
                     <option value={'pending'}>Pending</option>
                     <option value={'cancelled'}>Cancelled</option>
                 </Select>
-                <button type='submit' className='p-2 w-full rounded-md text-gray-600 hover:bg-gray-700 hover:text-white transition'>Add Booking</button>
+                <button type="submit"
+                    className='p-2 w-full rounded-md text-gray-600 hover:bg-gray-700 hover:text-white transition'
+                >
+                    {editBooking ? "Update Booking" : "Add Booking"}
+                </button>
+
             </form>
         </div>
     )
