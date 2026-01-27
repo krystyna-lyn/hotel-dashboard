@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import ActionButtons from './ActionButtons'
 import { getBookings } from '../../services/bookingService';
 
 
 
-const TableList = ({ setSelectedBooking }) => {
+const TableList = ({ setEditBooking }) => {
 
     const [bookings, setBookings] = useState([]);
 
@@ -18,10 +18,11 @@ const TableList = ({ setSelectedBooking }) => {
         }
     }
 
-
     useEffect(() => {
         fetchBookings();
     }, [])
+
+
     return (
         <div className='overflow-x-auto sm:rounded-lg'>
             <table className='w-full table-auto border-collapse mb-6 text-left text-gray-900 p-4 text-lg font-semibold dark:text-white'>
@@ -44,8 +45,9 @@ const TableList = ({ setSelectedBooking }) => {
                             <td className='flex md:table-cell justify-between p-3'>{booking.check_out.split('T')[0]}</td>
                             <td className='flex md:table-cell justify-between p-3'>{booking.status}</td>
                             <td className='flex md:table-cell justify-end gap-2 p-3'>
-                                <ActionButtons booking={booking}
-                                    onEdit={setSelectedBooking} />
+                                <ActionButtons
+                                    booking={booking}
+                                    setEditBooking={setEditBooking} />
                             </td>
                         </tr>
                     ))}
