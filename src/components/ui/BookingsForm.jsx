@@ -3,7 +3,7 @@ import Input from './Input'
 import Select from './Select'
 import { createBooking, updateBooking } from '../../services/bookingService'
 
-const BookingsForm = ({ editBooking }) => {
+const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking }) => {
 
     const [form, setForm] = useState({
         guest_name: '',
@@ -13,6 +13,7 @@ const BookingsForm = ({ editBooking }) => {
         status: 'confirmed'
     })
     //console.log("form:", form);
+
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,10 +35,13 @@ const BookingsForm = ({ editBooking }) => {
         e.preventDefault();
 
         if (editBooking) {
-            await updateBooking(editBooking.id, form);
-        }
-        else {
-            await createBooking(form);
+            const response = await updateBooking(editBooking.id, form);
+            const updated = bookings.map(booking => booking.id === editBooking.id ? response.data : booking);
+            setBookings(updated);
+            setEditBooking(null);
+        } else {
+            const response = createBooking(form);
+            setBookings([...bookings, response.data]);
         }
 
         setForm({
