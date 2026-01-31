@@ -1,26 +1,7 @@
-import { useEffect, useState } from 'react'
 import ActionButtons from './ActionButtons'
-import { getBookings } from '../../services/bookingService';
 
 
-
-const TableList = ({ setEditBooking }) => {
-
-    const [bookings, setBookings] = useState([]);
-
-    const fetchBookings = async () => {
-        try {
-            const response = await getBookings();
-            setBookings(response.data);
-
-        } catch (error) {
-            console.error('Error fetching bookings:', error)
-        }
-    }
-
-    useEffect(() => {
-        fetchBookings();
-    }, [])
+const TableList = ({ bookings, setEditBooking }) => {
 
 
     return (
