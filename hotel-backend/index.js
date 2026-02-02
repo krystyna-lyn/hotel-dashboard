@@ -65,6 +65,18 @@ app.put("/bookings/:id", async (req, res) => {
     }
 });
 
+app.delete("/bookings/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query("DELETE FROM bookings WHERE id=$1", [id]);
+        res.json({ success: true });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Database error" })
+    }
+
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
