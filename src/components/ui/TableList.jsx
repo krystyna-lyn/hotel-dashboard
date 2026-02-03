@@ -1,7 +1,7 @@
 import ActionButtons from './ActionButtons'
 
 
-const TableList = ({ bookings, setEditBooking }) => {
+const TableList = ({ bookings, setEditBooking, handleDelete }) => {
 
 
     return (
@@ -18,7 +18,7 @@ const TableList = ({ bookings, setEditBooking }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {bookings.map((booking, index) => (
+                    {bookings?.map((booking, index) => (
                         <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
                             <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
                             <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
@@ -28,7 +28,8 @@ const TableList = ({ bookings, setEditBooking }) => {
                             <td className='flex md:table-cell justify-end gap-2 p-3'>
                                 <ActionButtons
                                     booking={booking}
-                                    setEditBooking={setEditBooking} />
+                                    setEditBooking={setEditBooking}
+                                    handleDelete={handleDelete} />
                             </td>
                         </tr>
                     ))}
