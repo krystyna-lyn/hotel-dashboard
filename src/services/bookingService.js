@@ -14,3 +14,7 @@ export const updateBooking = (id, data) => {
     return axios.put(`${API_URL}/${id}`, data);
 }
 
+export const deleteBooking = (id, data) => {
+    return axios.delete(`${API_URL}/${id}`, data);
+}
+
