@@ -18,21 +18,23 @@ const TableList = ({ bookings, setEditBooking, handleDelete }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {bookings?.map((booking, index) => (
-                        <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
-                            <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
-                            <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
-                            <td className='flex md:table-cell justify-between p-3'>{booking.check_in.split('T')[0]}</td>
-                            <td className='flex md:table-cell justify-between p-3'>{booking.check_out.split('T')[0]}</td>
-                            <td className='flex md:table-cell justify-between p-3'>{booking.status}</td>
-                            <td className='flex md:table-cell justify-end gap-2 p-3'>
-                                <ActionButtons
-                                    booking={booking}
-                                    setEditBooking={setEditBooking}
-                                    handleDelete={handleDelete} />
-                            </td>
-                        </tr>
-                    ))}
+                    {bookings
+                        .filter(Boolean)
+                        .map((booking, index) => (
+                            <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
+                                <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{booking.check_in.split('T')[0]}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{booking.check_out.split('T')[0]}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{booking.status}</td>
+                                <td className='flex md:table-cell justify-end gap-2 p-3'>
+                                    <ActionButtons
+                                        booking={booking}
+                                        setEditBooking={setEditBooking}
+                                        handleDelete={handleDelete} />
+                                </td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </div>
