@@ -3,20 +3,28 @@ import BookingsForm from "../ui/BookingsForm";
 import TableList from "../ui/TableList";
 import { useEffect, useState } from "react";
 import { getBookings } from "../../services/bookingService";
+import { deleteBooking } from "../../services/bookingService";
 
 const Bookings = () => {
 
     const [bookings, setBookings] = useState([]);
     const [editBooking, setEditBooking] = useState(null);
 
+    const fetchBookings = async () => {
+        const response = await getBookings();
+        setBookings(response.data);
+    };
 
     useEffect(() => {
-        const fetchBookings = async () => {
-            const response = await getBookings();
-            setBookings(response.data)
-        }
+
         fetchBookings();
-    }, [])
+    }, []);
+
+    const handleDelete = async (id) => {
+        await deleteBooking(id);
+        const filtered = bookings.filter(booking => booking.id !== id);
+        setBookings(filtered);
+    }
 
     console.log("bookings:", bookings);
 
@@ -28,12 +36,14 @@ const Bookings = () => {
             <TableList
                 bookings={bookings}
                 setEditBooking={setEditBooking}
+                handleDelete={handleDelete}
             />
             <BookingsForm
                 bookings={bookings}
                 setBookings={setBookings}
                 editBooking={editBooking}
                 setEditBooking={setEditBooking}
+                refreshBookings={fetchBookings}
             />
         </div>
     )
