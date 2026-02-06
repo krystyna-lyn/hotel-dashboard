@@ -3,7 +3,7 @@ import Input from './Input'
 import Select from './Select'
 import { createBooking, updateBooking } from '../../services/bookingService'
 
-const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking }) => {
+const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refreshBookings }) => {
 
     const [form, setForm] = useState({
         guest_name: '',
@@ -41,6 +41,10 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking }) =>
             setEditBooking(null);
         } else {
             const response = createBooking(form);
+
+            console.log("CREATE RESPONSE:", response);
+
+
             setBookings([...bookings, response.data]);
         }
 
@@ -51,6 +55,8 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking }) =>
             check_out: '',
             status: 'confirmed'
         });
+
+        await refreshBookings();
     };
 
 
