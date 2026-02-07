@@ -5,11 +5,13 @@ import { createBooking, updateBooking } from '../../services/bookingService'
 
 const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refreshBookings }) => {
 
+    const today = new Date().toISOString().split("T")[0];
+
     const [form, setForm] = useState({
         guest_name: '',
         room_number: '',
-        check_in: '',
-        check_out: '',
+        check_in: today,
+        check_out: today,
         status: 'confirmed'
     })
     //console.log("form:", form);
@@ -40,19 +42,15 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
             setBookings(updated);
             setEditBooking(null);
         } else {
-            const response = createBooking(form);
-
-            console.log("CREATE RESPONSE:", response);
-
-
+            const response = await createBooking(form);
             setBookings([...bookings, response.data]);
         }
 
         setForm({
             guest_name: '',
             room_number: '',
-            check_in: '',
-            check_out: '',
+            check_in: today,
+            check_out: today,
             status: 'confirmed'
         });
 
