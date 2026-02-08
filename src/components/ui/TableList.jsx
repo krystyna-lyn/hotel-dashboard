@@ -3,6 +3,14 @@ import ActionButtons from './ActionButtons'
 
 const TableList = ({ bookings, setEditBooking, handleDelete }) => {
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("de-DE", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+    };
 
     return (
         <div className='overflow-x-auto sm:rounded-lg'>
@@ -24,8 +32,8 @@ const TableList = ({ bookings, setEditBooking, handleDelete }) => {
                             <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
                                 <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
                                 <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
-                                <td className='flex md:table-cell justify-between p-3'>{booking.check_in.split('T')[0]}</td>
-                                <td className='flex md:table-cell justify-between p-3'>{booking.check_out.split('T')[0]}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{formatDate(booking.check_in)}</td>
+                                <td className='flex md:table-cell justify-between p-3'>{formatDate(booking.check_out)}</td>
                                 <td className='flex md:table-cell justify-between p-3'>{booking.status}</td>
                                 <td className='flex md:table-cell justify-end gap-2 p-3'>
                                     <ActionButtons
