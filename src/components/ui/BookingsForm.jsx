@@ -9,6 +9,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
     const [form, setForm] = useState({
         guest_name: '',
+        room_type: '',
         room_number: '',
         check_in: today,
         check_out: today,
@@ -25,6 +26,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
         if (editBooking) {
             setForm({
                 guest_name: editBooking.guest_name,
+                room_type: editBooking.room_type,
                 room_number: editBooking.room_number,
                 check_in: editBooking.check_in.split('T')[0],
                 check_out: editBooking.check_out.split('T')[0],
@@ -48,6 +50,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
         setForm({
             guest_name: '',
+            room_type: '',
             room_number: '',
             check_in: today,
             check_out: today,
@@ -68,6 +71,17 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
                     placeholder='Guest name'
                     value={form.guest_name}
                     onChange={handleChange} />
+
+                <Select name='room_type'
+                    value={form.room_type}
+                    onChange={handleChange}
+                >
+                    <option value="">Select room type</option>
+                    <option value={'single'}>Single</option>
+                    <option value={'double'}>Double</option>
+                    <option value={'suite'}>Suite</option>
+                </Select>
+
                 <Input
                     type='text'
                     name='room_number'
