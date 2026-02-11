@@ -19,6 +19,7 @@ const TableList = ({ bookings, setEditBooking, handleDelete }) => {
                     <tr className='bg-gray-200 dark:bg-gray-700 mb-2'>
                         <th className='p-3'>Guest</th>
                         <th className='p-3'>Room</th>
+                        <th className='p-3'>Room N°</th>
                         <th className='p-3'>Check-in</th>
                         <th className='p-3'>Check-out</th>
                         <th className='p-3'>Status</th>
@@ -29,8 +30,9 @@ const TableList = ({ bookings, setEditBooking, handleDelete }) => {
                     {bookings
                         .filter(Boolean)
                         .map((booking, index) => (
-                            <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
-                                <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
+                            <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>                         <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
+
+                                <td className='flex md:table-cell justify-between p-3'>{booking.room_type}</td>
                                 <td className='flex md:table-cell justify-between p-3'>{booking.room_number}</td>
                                 <td className='flex md:table-cell justify-between p-3'>{formatDate(booking.check_in)}</td>
                                 <td className='flex md:table-cell justify-between p-3'>{formatDate(booking.check_out)}</td>
