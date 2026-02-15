@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import Input from './Input'
 import Select from './Select'
 import { createBooking, updateBooking } from '../../services/bookingService'
+import { bookingSchema } from '../../services/bookingSchema'
+
 
 const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refreshBookings }) => {
 
@@ -37,6 +39,13 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        //zod validation
+        const result = bookingSchema.safeParse(form);
+        if (!result.success) {
+            alert(result.error.message);
+            return;
+        }
 
         if (editBooking) {
             const response = await updateBooking(editBooking.id, form);
