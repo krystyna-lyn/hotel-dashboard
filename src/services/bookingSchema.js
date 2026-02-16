@@ -7,4 +7,14 @@ export const bookingSchema = z.object({
     check_out: z.string(),
     status: z.string(),
     room_type: z.string().min(1, "Room type required"),
+    spa: z.string().optional(),
+}).refine((data) => {
+    if (data.room_type === "suite") {
+        return data.spa;
+    }
+    return true;
+}, {
+    message: "Spa is required for suite",
+    path: ["spa"],
+
 });
