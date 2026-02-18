@@ -3,123 +3,117 @@ import Input from './Input'
 import Select from './Select'
 import { createBooking, updateBooking } from '../../services/bookingService'
 import { bookingSchema } from '../../services/bookingSchema'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 
 const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refreshBookings }) => {
 
     const today = new Date().toISOString().split("T")[0];
 
-    const [form, setForm] = useState({
-        guest_name: '',
-        room_type: '',
-        room_number: '',
-        check_in: today,
-        check_out: today,
-        status: 'confirmed'
-    })
-    //console.log("form:", form);
-
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    }
-
-    useEffect(() => {
-        if (editBooking) {
-            setForm({
-                guest_name: editBooking.guest_name,
-                room_type: editBooking.room_type,
-                room_number: editBooking.room_number,
-                check_in: editBooking.check_in.split('T')[0],
-                check_out: editBooking.check_out.split('T')[0],
-                status: editBooking.status
-            })
-        }
-    }, [editBooking]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        //zod validation
-        const result = bookingSchema.safeParse(form);
-        if (!result.success) {
-            alert(result.error.message);
-            return;
-        }
-
-        if (editBooking) {
-            const response = await updateBooking(editBooking.id, form);
-            const updated = bookings.map(booking => booking.id === editBooking.id ? response.data : booking);
-            setBookings(updated);
-            setEditBooking(null);
-        } else {
-            const response = await createBooking(form);
-            setBookings([...bookings, response.data]);
-        }
-
-        setForm({
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(bookingSchema),
+        defaultValues: {
             guest_name: '',
             room_type: '',
             room_number: '',
             check_in: today,
             check_out: today,
             status: 'confirmed'
-        });
+        }
+    });
+    //dynamic field
+    const roomType = watch("room_type");
 
-        await refreshBookings();
-    };
+    // edit mode
+    useEffect(() => {
+        if (editBooking) {
+            reset({
+                guest_name: editBooking.guest_name,
+                room_type: editBooking.room_type,
+                room_number: editBooking.room_number,
+                check_in: editBooking.check_in.split("T")[0],
+                check_out: editBooking.check_out.split("T")[0],
+                status: editBooking.status
+            });
+        };
+    }, [editBooking, reset]);
+
+
+    // submit
+
+    const onSubmit = async (data) => {
+        if (editBooking) {
+            const response = await updateBooking(editBooking.id, data);
+
+            const updated = bookings.map(booking => booking.id === editBooking.id ? response.data : booking)
+
+            setBookings(updated);
+            setEditBooking(null);
+        }
+        else {
+            const response = await createBooking(data);
+            setBookings([...bookings, response.data]);
+        }
+        reset();
+        refreshBookings();
+    }
 
 
     return (
         <div>
             <form className='mb-6 text-gray-900 p-2 text-lg font-semibold grid grid-cols-1 gap-10 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6'
-                onSubmit={handleSubmit}>
+                onSubmit={handleSubmit(onSubmit)}>
                 <Input
                     type='text'
                     name='guest_name'
-                    placeholder='Guest name'
-                    value={form.guest_name}
-                    onChange={handleChange} />
+                    {...register("guest_name")}
+                />
+                {errors.guest_name && <p>{errors.guest_name.message}</p>}
 
-                <Select name='room_type'
-                    value={form.room_type}
-                    onChange={handleChange}
+                <Select {...register("room_type")}
                 >
-                    <option value="">Select room type</option>
-                    <option value={'single'}>Single</option>
-                    <option value={'double'}>Double</option>
-                    <option value={'suite'}>Suite</option>
+                    <option value="single">Single</option>
+                    <option value="double">Double</option>
+                    <option value="suite">Suite</option>
                 </Select>
+                {errors.room_type && <p>{errors.room_type.message}</p>}
+
+                {roomType === "suite" && (
+                    <Select {...register("spa")}>
+                        <option value="">Spa included?</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </Select>
+                )}
+                {errors.spa && <p>{errors.spa.message}</p>}
 
                 <Input
                     type='text'
-                    name='room_number'
-                    placeholder='Room number'
-                    value={form.room_number}
-                    onChange={handleChange} />
+                    {...register("room_number")}
+                    placeholder='Room number' />
                 <Input
                     type='date'
-                    name='check_in'
-                    placeholder='Check-in date'
-                    value={form.check_in}
-                    onChange={handleChange} />
+                    {...register("check_in")} />
                 <Input
                     type='date'
-                    name='check_out'
-                    placeholder='Check-out date'
-                    value={form.check_out}
-                    onChange={handleChange} />
+                    {...register("check_out")} />
+                {errors.check_out && <p>{errors.check_out.message}</p>}
 
-                <Select name='status'
-                    value={form.status}
-                    onChange={handleChange}
+                <Select {...register("status")}
                 >
-                    <option value={'confirmed'}>Confirmed</option>
-                    <option value={'pending'}>Pending</option>
-                    <option value={'cancelled'}>Cancelled</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
                 </Select>
-                <button type="submit"
-                    className='p-2 w-full rounded-md text-gray-600 hover:bg-gray-700 hover:text-white transition'
+
+                <button className='p-2 w-full rounded-md text-gray-600 hover:bg-gray-700 hover:text-white transition'
                 >
                     {editBooking ? "Update Booking" : "Add Booking"}
                 </button>
