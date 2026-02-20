@@ -25,6 +25,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
             room_number: '',
             check_in: today,
             check_out: today,
+            spa: false,
             status: 'confirmed'
         }
     });
@@ -32,7 +33,9 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
     const roomType = watch("room_type");
 
     // edit mode
+
     useEffect(() => {
+
         if (editBooking) {
             reset({
                 guest_name: editBooking.guest_name,
@@ -40,6 +43,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
                 room_number: editBooking.room_number,
                 check_in: editBooking.check_in.split("T")[0],
                 check_out: editBooking.check_out.split("T")[0],
+                spa: editBooking.spa,
                 status: editBooking.status
             });
         };
@@ -49,6 +53,12 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
     // submit
 
     const onSubmit = async (data) => {
+        if (data.room_type !== 'suite') {
+            data.spa = false;
+
+        } else {
+            data.spa = data.spa === "true";
+        }
         if (editBooking) {
             const response = await updateBooking(editBooking.id, data);
 
@@ -61,7 +71,15 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
             const response = await createBooking(data);
             setBookings([...bookings, response.data]);
         }
-        reset();
+        reset({
+            guest_name: '',
+            room_type: '',
+            room_number: '',
+            check_in: today,
+            check_out: today,
+            spa: false,
+            status: 'confirmed'
+        });
         refreshBookings();
     }
 
@@ -87,9 +105,9 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
                 {roomType === "suite" && (
                     <Select {...register("spa")}>
-                        <option value="">Spa included?</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
+                        <option >Spa included?</option>
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
                     </Select>
                 )}
                 {errors.spa && <p>{errors.spa.message}</p>}
