@@ -16,9 +16,11 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
         handleSubmit,
         watch,
         reset,
+        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(bookingSchema),
+        mode: "onChange",
         defaultValues: {
             guest_name: '',
             room_type: '',
@@ -31,11 +33,24 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
     });
     //dynamic field
     const roomType = watch("room_type");
+    const checkIn = watch("check_in");
+    const checkOut = watch("check_out");
 
     // edit mode
 
-    useEffect(() => {
 
+    useEffect(() => {
+        // если тип комнаты не suite → spa всегда false
+        if (roomType !== "suite") {
+            setValue("spa", false);
+        }
+
+        // если checkout раньше checkin → исправляем
+        if (checkOut && checkOut < checkIn) {
+            setValue("check_out", checkIn);
+        }
+
+        // edit mode
         if (editBooking) {
             reset({
                 guest_name: editBooking.guest_name,
@@ -46,18 +61,17 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
                 spa: editBooking.spa,
                 status: editBooking.status
             });
-        };
-    }, [editBooking, reset]);
+        }
+    }, [editBooking, roomType, checkIn, checkOut, reset, setValue]);
+
+
 
 
     // submit
 
     const onSubmit = async (data) => {
-        if (data.room_type !== 'suite') {
+        if (data.room_type !== "suite") {
             data.spa = false;
-
-        } else {
-            data.spa = data.spa === "true";
         }
         if (editBooking) {
             const response = await updateBooking(editBooking.id, data);
@@ -97,6 +111,7 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
                 <Select {...register("room_type")}
                 >
+                    <option value="">Select room type</option>
                     <option value="single">Single</option>
                     <option value="double">Double</option>
                     <option value="suite">Suite</option>
@@ -104,24 +119,30 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
                 {errors.room_type && <p>{errors.room_type.message}</p>}
 
                 {roomType === "suite" && (
-                    <Select {...register("spa")}>
-                        <option >Spa included?</option>
-                        <option value={true}>Yes</option>
-                        <option value={false}>No</option>
+                    <Select {...register("spa", {
+                        setValueAs: v => v === "true"
+                    })}>
+                        <option value="">Spa included?</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </Select>
                 )}
                 {errors.spa && <p>{errors.spa.message}</p>}
 
                 <Input
                     type='text'
-                    {...register("room_number")}
-                    placeholder='Room number' />
+                    placeholder='Room number'
+                    {...register("room_number", { valueAsNumber: true })}
+                />
                 <Input
                     type='date'
-                    {...register("check_in")} />
+                    {...register("check_in")}
+                    min={today} />
                 <Input
                     type='date'
-                    {...register("check_out")} />
+                    {...register("check_out")}
+                    min={checkIn} />
+
                 {errors.check_out && <p>{errors.check_out.message}</p>}
 
                 <Select {...register("status")}
