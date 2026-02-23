@@ -11,7 +11,7 @@ app.use(json());
 const pool = new Pool({
     user: "",
     host: "localhost",
-    database: "",
+    database: "hotel_db",
     port: 5432,
 });
 
@@ -27,14 +27,14 @@ app.get("/bookings", async (req, res) => {
 
 app.post("/bookings", async (req, res) => {
     try {
-        const { guest_name, room_number, check_in, check_out, status } = req.body;
+        const { guest_name, room_type, room_number, check_in, check_out, spa, status } = req.body;
 
         const result = await pool.query(
             `INSERT INTO bookings 
-       (guest_name, room_number, check_in, check_out, status)
-       VALUES ($1, $2, $3, $4, $5)
+       (guest_name,room_type, room_number, check_in, check_out,spa,status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
-            [guest_name, room_number, check_in, check_out, status]
+            [guest_name, room_type, room_number, check_in, check_out, spa, status]
         );
 
         res.status(201).json(result.rows[0]);
@@ -46,16 +46,16 @@ app.post("/bookings", async (req, res) => {
 
 app.put("/bookings/:id", async (req, res) => {
     const { id } = req.params;
-    const { guest_name, room_number, check_in, check_out, status } = req.body;
+    const { guest_name, room_type, room_number, check_in, check_out, spa, status } = req.body;
 
     try {
 
         const result = await pool.query(
             `UPDATE bookings 
-         SET guest_name=$1, room_number=$2, check_in=$3, check_out=$4, status=$5
-         WHERE id=$6
+         SET guest_name=$1, room_type=$2, room_number=$3, check_in=$4, check_out=$5, status=$6, spa=$7
+         WHERE id=$8
          RETURNING *`,
-            [guest_name, room_number, check_in, check_out, status, id]
+            [guest_name, room_type, room_number, check_in, check_out, spa, status, id]
         );
 
         res.json(result.rows[0]);
