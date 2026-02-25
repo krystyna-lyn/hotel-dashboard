@@ -70,31 +70,48 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
     // submit
 
     const onSubmit = async (data) => {
-        if (data.room_type !== "suite") {
-            data.spa = false;
-        }
-        if (editBooking) {
-            const response = await updateBooking(editBooking.id, data);
 
-            const updated = bookings.map(booking => booking.id === editBooking.id ? response.data : booking)
 
-            setBookings(updated);
-            setEditBooking(null);
+
+        try {
+            if (data.room_type !== "suite") {
+                data.spa = false;
+            }
+
+            if (editBooking) {
+                const response = await updateBooking(editBooking.id, data);
+
+                const updated = bookings.map(booking => booking.id === editBooking.id ? response.data : booking)
+
+                setBookings(updated);
+                setEditBooking(null);
+            }
+
+            else {
+                const response = await createBooking(data);
+                setBookings([...bookings, response.data]);
+            }
+            reset({
+                guest_name: '',
+                room_type: '',
+                room_number: '',
+                check_in: today,
+                check_out: today,
+                spa: false,
+                status: 'confirmed'
+            });
+            refreshBookings();
+        } catch (error) {
+
+            // errors from backend 
+
+            console.error("Error:", error);
+            alert(error.response?.data?.message || "An error occurred. Please try again.");
         }
-        else {
-            const response = await createBooking(data);
-            setBookings([...bookings, response.data]);
-        }
-        reset({
-            guest_name: '',
-            room_type: '',
-            room_number: '',
-            check_in: today,
-            check_out: today,
-            spa: false,
-            status: 'confirmed'
-        });
-        refreshBookings();
+
+
+        console.log(typeof data.spa);
+
     }
 
 
@@ -130,18 +147,12 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
                 {errors.spa && <p>{errors.spa.message}</p>}
 
                 <Input
-                    type='text'
+                    type='number'
                     placeholder='Room number'
                     {...register("room_number", { valueAsNumber: true })}
                 />
-                <Input
-                    type='date'
-                    {...register("check_in")}
-                    min={today} />
-                <Input
-                    type='date'
-                    {...register("check_out")}
-                    min={checkIn} />
+                <Input type='date'{...register("check_in")} min={today} />
+                <Input type='date' {...register("check_out")} min={checkIn} />
 
                 {errors.check_out && <p>{errors.check_out.message}</p>}
 
