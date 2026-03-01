@@ -29,6 +29,21 @@ app.post("/bookings", async (req, res) => {
     try {
         const { guest_name, room_type, room_number, check_in, check_out, spa, status } = req.body;
 
+        // check for conflicts
+        const conflict = await pool.query(
+            `SELECT * FROM bookings
+       WHERE room_number = $1
+       AND $2 < check_out
+       AND $3 > check_in`,
+            [room_number, check_in, check_out]
+        );
+
+        if (conflict.rows.length > 0) {
+            return res.status(400).json({
+                message: "Room already booked for these dates"
+            });
+        }
+
         const result = await pool.query(
             `INSERT INTO bookings 
        (guest_name,room_type, room_number, check_in, check_out,spa,status)
