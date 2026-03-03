@@ -67,7 +67,7 @@ app.put("/bookings/:id", async (req, res) => {
 
         const result = await pool.query(
             `UPDATE bookings 
-         SET guest_name=$1, room_type=$2, room_number=$3, check_in=$4, check_out=$5, status=$6, spa=$7
+         SET guest_name=$1, room_type=$2, room_number=$3, check_in=$4, check_out=$5, spa=$6, status=$7
          WHERE id=$8
          RETURNING *`,
             [guest_name, room_type, room_number, check_in, check_out, spa, status, id]
