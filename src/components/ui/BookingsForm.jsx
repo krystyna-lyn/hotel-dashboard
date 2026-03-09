@@ -38,33 +38,38 @@ const BookingsForm = ({ bookings, setBookings, editBooking, setEditBooking, refr
 
     // edit mode
 
-
     useEffect(() => {
-        // если тип комнаты не suite → spa всегда false
         if (roomType !== "suite") {
             setValue("spa", false);
         }
+    }, [roomType, setValue]);
+
+    useEffect(() => {
 
         // если checkout раньше checkin → исправляем
         if (checkOut && checkOut < checkIn) {
             setValue("check_out", checkIn);
         }
 
-        // edit mode
+    }, [roomType, checkIn, checkOut, reset, setValue]);
+
+    // edit mode
+    useEffect(() => {
         if (editBooking) {
+
+            console.log("STATUS TYPE:", typeof editBooking.status, editBooking.status);
             reset({
                 guest_name: editBooking.guest_name,
                 room_type: editBooking.room_type,
                 room_number: editBooking.room_number,
                 check_in: editBooking.check_in.split("T")[0],
                 check_out: editBooking.check_out.split("T")[0],
-                spa: editBooking.spa,
+                spa: editBooking.spa === true || editBooking.spa === "true",
                 status: editBooking.status
             });
         }
-    }, [editBooking, roomType, checkIn, checkOut, reset, setValue]);
 
-
+    }, [editBooking, reset]);
 
 
     // submit
