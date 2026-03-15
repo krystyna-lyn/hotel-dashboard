@@ -30,6 +30,7 @@ const TableList = ({ bookings, setEditBooking, handleDelete }) => {
                 <tbody>
                     {bookings
                         .filter(Boolean)
+                        .sort((a, b) => new Date(a.check_in) - new Date(b.check_in))
                         .map((booking, index) => (
                             <tr key={index} className='block md:table-row bg-white dark:bg-gray-800 rounded-lg shadow-md mb-2'>
                                 <td className='flex md:table-cell justify-between p-3'>{booking.guest_name}</td>
