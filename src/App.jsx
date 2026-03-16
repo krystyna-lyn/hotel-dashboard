@@ -6,6 +6,7 @@ import Dashboard from "./components/pages/Dashboard";
 import Bookings from "./components/pages/Bookings";
 import Rooms from "./components/pages/Rooms";
 import Guests from "./components/pages/Guests";
+import Settings from "./components/pages/Settings";
 function App() {
   return (
     <ThemeContextProvider>
@@ -16,6 +17,7 @@ function App() {
             <Route path='/bookings' element={<Bookings />} />
             <Route path='/rooms' element={<Rooms />} />
             <Route path='/guests' element={<Guests />} />
+            <Route path='/settings' element={<Settings />} />
           </Route>
         </Routes>
 
