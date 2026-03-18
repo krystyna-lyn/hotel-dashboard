@@ -6,7 +6,6 @@ import { getBookings } from "../../services/bookingService";
 import { deleteBooking } from "../../services/bookingService";
 
 const Bookings = () => {
-
     const [bookings, setBookings] = useState([]);
     const [editBooking, setEditBooking] = useState(null);
 
@@ -16,28 +15,25 @@ const Bookings = () => {
     };
 
     useEffect(() => {
-
         fetchBookings();
     }, []);
 
     const handleDelete = async (id) => {
         await deleteBooking(id);
-        const filtered = bookings.filter(booking => booking.id !== id);
+        const filtered = bookings.filter((booking) => booking.id !== id);
         setBookings(filtered);
-    }
-
-    console.log("bookings:", bookings);
+    };
 
     return (
-        <div className="text-2xl font-semibold mb-4">
-            <p className="text-gray-900 mb-4 dark:text-white">
-                Manage all your bookings here
-            </p>
-            <TableList
-                bookings={bookings}
-                setEditBooking={setEditBooking}
-                handleDelete={handleDelete}
-            />
+        <div className="space-y-6">
+            <div>
+                <h1 className="text-lg sm:text-xl font-semibold text-stone-900 dark:text-stone-50 tracking-tight">
+                    Bookings
+                </h1>
+                <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+                    Manage all your guest reservations.
+                </p>
+            </div>
             <BookingsForm
                 bookings={bookings}
                 setBookings={setBookings}
@@ -45,8 +41,14 @@ const Bookings = () => {
                 setEditBooking={setEditBooking}
                 refreshBookings={fetchBookings}
             />
+            <TableList
+                bookings={bookings}
+                setEditBooking={setEditBooking}
+                handleDelete={handleDelete}
+            />
+
         </div>
-    )
+    );
 }
 
 export default Bookings;
